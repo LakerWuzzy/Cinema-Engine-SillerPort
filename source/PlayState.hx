@@ -918,8 +918,6 @@ class PlayState extends MusicBeatState
 				boyfriend.y += 220;
 				gf.x += 180;
 				gf.y += 300;
-			case 'bopcity':
-				gf.visible = false;
 			case 'ikea':
 				// evilTrail = new FlxTrail(dad, null, 3, 24, 0.3, 0.05);
 				// add(evilTrail);
@@ -3128,16 +3126,6 @@ class PlayState extends MusicBeatState
 			// dad.dance();
 		}
 		
-		if (curSong == 'bopcityfansong') 
-		{
-			switch (curStep)
-			{
-				case 1071:
-					remove(boyfriend);
-					boyfriend = new Boyfriend(770, 150, 'nuggetdance');
-					add(boyfriend);
-			}
-		}
 		
 		if (curSong == 'unfairness-jside') {
 			switch (curStep) {
@@ -3280,23 +3268,6 @@ class PlayState extends MusicBeatState
 			if (curBeat == 160) {
 				stupidFuckingSpotlight1.visible = false;
 				stupidFuckingSpotlight2.visible = false;
-			}
-		}
-		
-		if (curSong == 'bopcityfansong') 
-		{
-			switch (curBeat)
-			{
-				case 111:
-					explosion.animation.play('boom', true);
-				case 112:
-					remove(dad);
-					dad = new Character(100, 250, 'evilblocku');
-					add(dad);
-				case 220:
-					remove(dad);
-					dad = new Character(100, 250, 'niceblocku');
-					add(dad);
 			}
 		}
 		
