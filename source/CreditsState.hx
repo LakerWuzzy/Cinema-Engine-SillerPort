@@ -9,7 +9,7 @@ import flixel.FlxG;
 class CreditsState extends MusicBeatState {
     var curSelected:Int = 0;
 
-    var grpCredits:Array<String> = ["poe","x8c8r","didgie"];
+    var grpCredits:Array<String> = ["poe","x8c8r","didgie","jo560hs","cobblestoneface","thomicfee"];
     var grpCreditsPics:FlxTypedGroup<FlxSprite>;
 
     var devCreditImage:FlxSprite;
