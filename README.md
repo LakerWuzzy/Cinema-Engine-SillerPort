@@ -1,6 +1,6 @@
 # Friday Night Funkin Cinema Engine
 
-![KadeEngineLogo](https://raw.githubusercontent.com/x8c8r/Cinema-Engine/main/KadeEngineLogo.png)
+![KadeEngineLogo](https://raw.githubusercontent.com/x8c8r/Cinema-Engine/master/KadeEngineLogo.png)
 
 # Features
 ## Chart Editor (Peak)
