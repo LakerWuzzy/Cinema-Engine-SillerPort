@@ -49,8 +49,8 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		#if polymod
-		polymod.Polymod.init({modRoot: "mods", dirs: ['introMod']});
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
 		#end
 
 		#if desktop
@@ -270,18 +270,19 @@ class TitleState extends MusicBeatState
 
 		var gamepad:FlxGamepad = FlxG.gamepads.lastActive;
 
-		if (gamepad != null)
+		#if mobile
+                var justTouched:Bool = false;
+
+		for (touch in FlxG.touches.list)
 		{
-			if (gamepad.justPressed.START)
-				pressedEnter = true;
-
-			#if switch
-			if (gamepad.justPressed.B)
-				pressedEnter = true;
-			#end
+			if (touch.justPressed)
+			{
+				justTouched = true;
+			}
 		}
+		#end
 
-		if (pressedEnter && !transitioning && skippedIntro)
+		if (pressedEnter #if mobile || justTouched #end && !transitioning && skippedIntro)
 		{
 			#if !switch
 			NGio.unlockMedal(60960);
@@ -310,7 +311,7 @@ class TitleState extends MusicBeatState
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 		}
 
-		if (pressedEnter && !skippedIntro)
+		if (pressedEnter #if mobile || justTouched #end && !skippedIntro)
 		{
 			skipIntro();
 		}
@@ -365,7 +366,7 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['team', 'cinemamakers', '']);
+				createCoolText(['team', 'cinemamakers (Gabo Make Port)', '']);
 			// credTextShit.visible = true;
 			case 3:
 				addMoreText('presents');

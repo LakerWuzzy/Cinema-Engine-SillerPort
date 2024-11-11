@@ -9,7 +9,7 @@ import flixel.FlxG;
 class CreditsState extends MusicBeatState {
     var curSelected:Int = 0;
 
-    var grpCredits:Array<String> = ["poe","x8c8r","didgie","jo560hs","cobblestoneface","thomicfee"];
+    var grpCredits:Array<String> = ["poe","x8c8r","didgie","jo560hs","cobblestoneface","thomicfee","gabowuz"];
     var grpCreditsPics:FlxTypedGroup<FlxSprite>;
 
     var devCreditImage:FlxSprite;
@@ -24,6 +24,10 @@ class CreditsState extends MusicBeatState {
             var pic:FlxSprite = new FlxSprite(i * 1280).loadGraphic(Paths.image("credits/"+grpCredits[i]));
             grpCreditsPics.add(pic);
         }
+        
+        #if mobile
+        addVirtualPad(LEFT_FULL, B);
+        #end
 
         scroll();
     }
@@ -36,9 +40,9 @@ class CreditsState extends MusicBeatState {
 			FlxG.switchState(new MainMenuState());
 		}
 
-        if (FlxG.keys.justPressed.RIGHT)
+        if (controls.RIGHT_P)
             scroll(1);
-        if (FlxG.keys.justPressed.LEFT)
+        if (controls.LEFT_P)
             scroll(-1);
     }
 

@@ -169,10 +169,14 @@ class OptionsMenu extends MusicBeatState
 		}
 
 
-		versionShit = new FlxText(5, FlxG.height - 18, 0, "Offset (Left, Right): " + FlxG.save.data.offset, 12);
+		versionShit = new FlxText(5, FlxG.height - 18, 0, "sex android port", 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
+		
+		#if mobile
+		addVirtualPad(UP_DOWN, A_B_C);
+		#end
 
 		super.create();
 	}
@@ -189,6 +193,13 @@ class OptionsMenu extends MusicBeatState
 				changeSelection(1);
 			if (FlxG.keys.justPressed.DELETE)
 				SaveManagement.resetSaveData();
+				
+			#if mobile
+			if (virtualPad.buttonC.justPressed) {
+			  removeVirtualPad();
+			  openSubState(new mobile.MobileControlsSubState());
+			}
+			#end
 			
 			if (controls.RIGHT_R)
 			{
