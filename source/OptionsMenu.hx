@@ -175,7 +175,7 @@ class OptionsMenu extends MusicBeatState
 		add(versionShit);
 		
 		#if mobile
-		addVirtualPad(UP_DOWN, A_B_C);
+		addVirtualPad(LEFT_FULL, A_B_C);
 		#end
 
 		super.create();

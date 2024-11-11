@@ -26,7 +26,7 @@ class CreditsState extends MusicBeatState {
         }
         
         #if mobile
-        addVirtualPad(LEFT_FULL, B);
+        addVirtualPad(UP_DOWN, B);
         #end
 
         scroll();
