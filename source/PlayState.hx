@@ -2284,39 +2284,6 @@ class PlayState extends MusicBeatState
 		FlxG.switchState(new FreeplayState());
 	}
 
-	public function startVideo(name:String)
-		{
-			var filepath:String = Paths.video(name);
-			#if sys
-			if(!FileSystem.exists(filepath))
-			#else
-			if(!OpenFlAssets.exists(filepath))
-			#end
-			{
-				FlxG.log.warn('Couldnt find video file: ' + name);
-				return;
-			}
-	
-			var video:VideoHandler = new VideoHandler();
-				#if (hxCodec >= "3.0.0")
-				// Recent versions
-				video.play(filepath);
-				video.onEndReached.add(function()
-				{
-					video.dispose();
-					return;
-				}, true);
-				#else
-				// Older versions
-				video.playVideo(filepath);
-				video.finishCallback = function()
-				{
-					return;
-				}
-				#end
-		}
-	
-
 	function endSong():Void
 	{
 
@@ -3295,7 +3262,6 @@ class PlayState extends MusicBeatState
 					unfairJbg.alpha = 1;
 					thornbg.alpha = 0;
 					FlxTween.tween(whiteShitJ, {alpha: 0}, 1, {ease: FlxEase.linear});
-					FlxTween.tween(songTimer, {"endTime": Math.round(songLength/1000)}, 27, {ease:FlxEase.expoIn});
 				case 492: // 492
 					lol = new FlxSprite(boyfriend.x-200, boyfriend.y - 50).loadGraphic(Paths.image('stages/ikea/cobble'));
 					lol.alpha = 0;
