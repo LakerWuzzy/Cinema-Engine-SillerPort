@@ -1,5 +1,6 @@
 package;
 
+import flixel.system.FlxSound;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.text.FlxTypeText;
@@ -33,7 +34,8 @@ class DialogueBox extends FlxSpriteGroup
 
 	var handSelect:FlxSprite;
 	var bgFade:FlxSprite;
-	var leftChar:String = "sigmio";
+
+	var sound:FlxSound;
 
 	public function new(talkingRight:Bool = true, ?dialogueList:Array<String>)
 	{
@@ -42,11 +44,15 @@ class DialogueBox extends FlxSpriteGroup
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'senpai':
-				FlxG.sound.playMusic(Paths.music('Lunchbox'), 0);
-				FlxG.sound.music.fadeIn(1, 0, 0.8);
+				sound = new FlxSound().loadEmbedded(Paths.music('Lunchbox'),true);
+				sound.volume = 0;
+				FlxG.sound.list.add(sound);
+				sound.fadeIn(1, 0, 0.8);
 			case 'thorns':
-				FlxG.sound.playMusic(Paths.music('LunchboxScary'), 0);
-				FlxG.sound.music.fadeIn(1, 0, 0.8);
+				sound = new FlxSound().loadEmbedded(Paths.music('LunchboxScary'),true);
+				sound.volume = 0;
+				FlxG.sound.list.add(sound);
+				sound.fadeIn(1, 0, 0.8);
 		}
 
 		bgFade = new FlxSprite(-200, -200).makeGraphic(Std.int(FlxG.width * 1.3), Std.int(FlxG.height * 1.3), 0xFFB3DFd8);
@@ -62,8 +68,8 @@ class DialogueBox extends FlxSpriteGroup
 		}, 5);
 
 		box = new FlxSprite(-20, 45);
+		
 		var hasDialog = false;
-
 		switch (PlayState.SONG.song.toLowerCase())
 		{
 			case 'senpai':
@@ -91,38 +97,28 @@ class DialogueBox extends FlxSpriteGroup
 		}
 
 		this.dialogueList = dialogueList;
-
+		
 		if (!hasDialog)
 			return;
-
-		var configFile:Array<String> = CoolUtil.coolTextFile(Paths.txtImages("dialogue/characters/" + PlayState.SONG.player2));
-		portraitLeft = new FlxSprite(Std.parseFloat(configFile[3]), Std.parseFloat(configFile[4]));
-		portraitLeft.frames = Paths.getSparrowAtlas('dialogue/characters/' + PlayState.SONG.player2);
-		portraitLeft.animation.addByPrefix('enter', configFile[0], 24, false);
-		if (configFile[5] == "true")
-			portraitLeft.flipX = true;
-		else
-			portraitLeft.flipX = false;
+		
+		portraitLeft = new FlxSprite(-20, 40);
+		portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
+		portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
 		portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
 		portraitLeft.updateHitbox();
 		portraitLeft.scrollFactor.set();
 		add(portraitLeft);
 		portraitLeft.visible = false;
 
-		var configFile:Array<String> = CoolUtil.coolTextFile(Paths.txtImages("dialogue/characters/" + PlayState.SONG.player1));
-		portraitRight = new FlxSprite(Std.parseFloat(configFile[1]), Std.parseFloat(configFile[2]));
-		portraitRight.frames = Paths.getSparrowAtlas('dialogue/characters/' + PlayState.SONG.player1);
-		portraitRight.animation.addByPrefix('enter', configFile[0], 24, false);
-		if (configFile[5] == "true")
-			portraitRight.flipX = true;
-		else
-			portraitRight.flipX = false;
+		portraitRight = new FlxSprite(0, 40);
+		portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
+		portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
 		portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
 		portraitRight.updateHitbox();
 		portraitRight.scrollFactor.set();
 		add(portraitRight);
 		portraitRight.visible = false;
-
+		
 		box.animation.play('normalOpen');
 		box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
 		box.updateHitbox();
@@ -131,9 +127,9 @@ class DialogueBox extends FlxSpriteGroup
 		box.screenCenter(X);
 		portraitLeft.screenCenter(X);
 
-		handSelect = new FlxSprite(FlxG.width * 0.9, FlxG.height * 0.9).loadGraphic(Paths.image('ui/pixelUI/hand_textbox'));
-		handSelect.setGraphicSize(3,3);
+		handSelect = new FlxSprite(FlxG.width * 0.9, FlxG.height * 0.9).loadGraphic(Paths.image('weeb/pixelUI/hand_textbox'));
 		add(handSelect);
+
 
 		if (!talkingRight)
 		{
@@ -151,7 +147,7 @@ class DialogueBox extends FlxSpriteGroup
 		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
 		add(swagDialogue);
 
-		dialogue = new Alphabet(0, 80, "", false);
+		dialogue = new Alphabet(0, 80, "", false, true);
 		// dialogue.x = 90;
 		// add(dialogue);
 	}
@@ -162,8 +158,11 @@ class DialogueBox extends FlxSpriteGroup
 	override function update(elapsed:Float)
 	{
 		// HARD CODING CUZ IM STUPDI
-		if (PlayState.SONG.song.toLowerCase() == 'thorns' || PlayState.SONG.song.toLowerCase() == 'roses')
+		if (PlayState.SONG.song.toLowerCase() == 'roses')
+			portraitLeft.visible = false;
+		if (PlayState.SONG.song.toLowerCase() == 'thorns')
 		{
+			portraitLeft.visible = false;
 			swagDialogue.color = FlxColor.WHITE;
 			dropText.color = FlxColor.BLACK;
 		}
@@ -172,15 +171,11 @@ class DialogueBox extends FlxSpriteGroup
 
 		if (box.animation.curAnim != null)
 		{
-			if (box.animation.exists("normalOpen")) {
-				if (box.animation.curAnim.name == 'normalOpen' && box.animation.curAnim.finished)
-				{
-					box.animation.play('normal');
-					dialogueOpened = true;
-				}
-			}
-			else 
+			if (box.animation.curAnim.name == 'normalOpen' && box.animation.curAnim.finished)
+			{
+				box.animation.play('normal');
 				dialogueOpened = true;
+			}
 		}
 
 		if (dialogueOpened && !dialogueStarted)
@@ -201,12 +196,11 @@ class DialogueBox extends FlxSpriteGroup
 		}
 		#end
 
-		if (FlxG.keys.justPressed.ANY #if mobile || justTouched #end && dialogueStarted == true)
+		if (PlayerSettings.player1.controls.ACCEPT #if mobile || justTouched #end && dialogueStarted == true)
 		{
 			remove(dialogue);
-
-			if (!isEnding)
-				FlxG.sound.play(Paths.sound('clickText'), 0.8);
+				
+			FlxG.sound.play(Paths.sound('clickText'), 0.8);
 
 			if (dialogueList[1] == null && dialogueList[0] != null)
 			{
@@ -215,8 +209,7 @@ class DialogueBox extends FlxSpriteGroup
 					isEnding = true;
 
 					if (PlayState.SONG.song.toLowerCase() == 'senpai' || PlayState.SONG.song.toLowerCase() == 'thorns')
-						FlxG.sound.music.fadeOut(2.2, 0);
-
+						sound.fadeOut(2.2, 0);
 					new FlxTimer().start(0.2, function(tmr:FlxTimer)
 					{
 						box.alpha -= 1 / 5;
@@ -240,7 +233,7 @@ class DialogueBox extends FlxSpriteGroup
 				startDialogue();
 			}
 		}
-
+		
 		super.update(elapsed);
 	}
 
