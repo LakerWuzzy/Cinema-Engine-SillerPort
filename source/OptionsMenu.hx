@@ -204,17 +204,17 @@ class OptionsMenu extends MusicBeatState
 			if (controls.RIGHT_R)
 			{
 				FlxG.save.data.offset++;
-				versionShit.text = "Offset (Left, Right): " + FlxG.save.data.offset;
+				versionShit.text = "sex android port: " + FlxG.save.data.offset;
 			}
 
 			if (controls.LEFT_R)
 				{
 					FlxG.save.data.offset--;
-					versionShit.text = "Offset (Left, Right): " + FlxG.save.data.offset;
+					versionShit.text = "sex android port: " + FlxG.save.data.offset;
 				}
 	
 
-			if (FlxG.keys.justPressed.ENTER)
+			if (controls.ACCEPT)
 			{
 				changeOption(options[curSelected], curSelected);
 			}
