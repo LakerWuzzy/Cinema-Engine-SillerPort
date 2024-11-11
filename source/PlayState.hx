@@ -2944,8 +2944,6 @@ class PlayState extends MusicBeatState
 						add(boyfriend);
 						iconP1.animation.play(params[1]);
 					}
-				case "Play Video":
-					startVideo(noteTypeParam);
 				default:
 					// trace(zeNoteType + "was HITTTEEEEEEEEEEEEED");
 			}
